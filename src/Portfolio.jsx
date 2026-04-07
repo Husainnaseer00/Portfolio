@@ -3,7 +3,6 @@ import { Menu, X, ArrowRight, Github, Linkedin, Mail, ExternalLink, ChevronDown 
 
 export default function Portfolio() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
