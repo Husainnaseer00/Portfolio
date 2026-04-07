@@ -1,6 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowRight, Github, Linkedin, Mail, ExternalLink, ChevronDown } from 'lucide-react';
 
+const styles = `
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', 'Trebuchet MS', sans-serif;
+    background-color: #000;
+    color: #fff;
+  }
+  
+  h1, h2, h3 {
+    font-family: 'Georgia', 'Garamond', serif;
+  }
+  
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  
+  button {
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+  }
+  
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(10px);
+    }
+  }
+`;
+
 export default function Portfolio() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -19,7 +57,6 @@ export default function Portfolio() {
       description: 'End-to-end ETL pipeline predicting stock prices using machine learning and BigQuery.',
       tech: ['BigQuery', 'Python', 'dbt', 'TensorFlow', 'API Integration'],
       image: '📈',
-      link: '#',
       highlights: ['120K+ daily data points processed', '89% prediction accuracy', 'Real-time market data ingestion'],
     },
     {
@@ -29,225 +66,361 @@ export default function Portfolio() {
       description: 'AI-powered content recommendation system with engagement analytics and ranking models.',
       tech: ['OpenSearch', 'Python', 'AWS Lambda', 'Gradient Boosting', 'ML'],
       image: '🎯',
-      link: '#',
       highlights: ['18% engagement boost', 'Real-time recommendations', 'Ranking model optimization'],
     },
     {
       id: 3,
-      title: 'Meme Coin Sentiment Analyzer 🚀',
+      title: 'Meme Coin Sentiment Analyzer',
       category: 'Fun',
       description: 'Hilarious project tracking sentiment of meme coins using Twitter/Reddit APIs and NLP.',
       tech: ['Twitter API', 'VADER Sentiment', 'Python', 'Reddit PRAW', 'Data Viz'],
       image: '🐕',
-      link: '#',
       highlights: ['DOGE/SHIB/PEPE tracking', 'Real-time sentiment scoring', '"To the moon! 🌙" detector'],
     },
   ];
 
-  const blogPosts = [
-    {
-      id: 1,
-      title: 'Building Real-Time Data Pipelines with BigQuery',
-      category: 'Data Engineering',
-      excerpt: 'A deep dive into ETL architecture, optimization techniques, and production best practices.',
-      readTime: '8 min read',
-      date: 'Coming Soon',
-    },
-    {
-      id: 2,
-      title: 'RAG Systems: Bridging LLMs and Your Data',
-      category: 'AI/ML',
-      excerpt: 'How to build retrieval-augmented generation systems that let AI reason over your documents.',
-      readTime: '6 min read',
-      date: 'Coming Soon',
-    },
-    {
-      id: 3,
-      title: 'Search Technology: From Keywords to Semantics',
-      category: 'Search',
-      excerpt: 'Exploring hybrid search, embeddings, and how modern systems find what users actually mean.',
-      readTime: '7 min read',
-      date: 'Coming Soon',
-    },
-  ];
-
   const NavBar = () => (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-black/95 backdrop-blur shadow-lg border-b border-white/10' : 'bg-transparent'}`}>
-      <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-        <div className="text-xl font-serif font-bold text-white">HN</div>
+    <nav style={{
+      position: 'fixed',
+      top: 0,
+      width: '100%',
+      zIndex: 50,
+      backgroundColor: scrolled ? 'rgba(0, 0, 0, 0.95)' : 'transparent',
+      borderBottom: scrolled ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
+      transition: 'all 0.3s ease',
+      backdropFilter: scrolled ? 'blur(10px)' : 'none',
+    }}>
+      <div style={{
+        maxWidth: '1400px',
+        margin: '0 auto',
+        padding: '1.5rem 1.5rem',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}>
+        <div style={{
+          fontSize: '1.25rem',
+          fontWeight: 'bold',
+          fontFamily: 'Georgia, serif',
+        }}>HN</div>
         
-        <div className="hidden md:flex gap-8 text-sm">
+        <div style={{
+          display: 'none',
+          gap: '2rem',
+        }} className="desktop-nav">
           {['Home', 'Projects', 'Blog', 'About'].map((item) => (
             <button
               key={item}
-              className="text-gray-300 hover:text-white transition-colors font-medium"
+              style={{
+                color: '#d1d5db',
+                backgroundColor: 'transparent',
+                fontSize: '0.875rem',
+                fontWeight: '500',
+                transition: 'color 0.3s',
+              }}
+              onMouseEnter={(e) => e.target.style.color = '#fff'}
+              onMouseLeave={(e) => e.target.style.color = '#d1d5db'}
             >
               {item}
             </button>
           ))}
         </div>
 
-        <button className="md:hidden text-white" onClick={() => setMenuOpen(!menuOpen)}>
+        <button 
+          style={{
+            display: 'none',
+            color: '#fff',
+            backgroundColor: 'transparent',
+          }}
+          className="mobile-menu-btn"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
       {menuOpen && (
-        <div className="md:hidden bg-black border-t border-white/10">
-          <div className="flex flex-col gap-4 p-6">
-            {['Home', 'Projects', 'Blog', 'About'].map((item) => (
-              <button
-                key={item}
-                onClick={() => setMenuOpen(false)}
-                className="text-gray-300 hover:text-white transition-colors text-left"
-              >
-                {item}
-              </button>
-            ))}
-          </div>
+        <div style={{
+          backgroundColor: '#000',
+          borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+          padding: '1.5rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+        }}>
+          {['Home', 'Projects', 'Blog', 'About'].map((item) => (
+            <button
+              key={item}
+              onClick={() => setMenuOpen(false)}
+              style={{
+                color: '#d1d5db',
+                backgroundColor: 'transparent',
+                fontSize: '1rem',
+                textAlign: 'left',
+                transition: 'color 0.3s',
+              }}
+              onMouseEnter={(e) => e.target.style.color = '#fff'}
+              onMouseLeave={(e) => e.target.style.color = '#d1d5db'}
+            >
+              {item}
+            </button>
+          ))}
         </div>
       )}
     </nav>
   );
 
   const Hero = () => (
-    <section className="min-h-screen bg-black pt-20 pb-20 px-6 relative overflow-hidden flex items-center justify-center">
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-white rounded-full mix-blend-multiply filter blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-72 h-72 bg-gray-600 rounded-full mix-blend-multiply filter blur-3xl"></div>
+    <section style={{
+      minHeight: '100vh',
+      backgroundColor: '#000',
+      padding: '5rem 1.5rem',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        opacity: 0.1,
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: '80px',
+          left: '80px',
+          width: '288px',
+          height: '288px',
+          backgroundColor: '#fff',
+          borderRadius: '50%',
+          filter: 'blur(80px)',
+          mixBlendMode: 'multiply',
+        }}></div>
+        <div style={{
+          position: 'absolute',
+          bottom: '80px',
+          right: '80px',
+          width: '288px',
+          height: '288px',
+          backgroundColor: '#666',
+          borderRadius: '50%',
+          filter: 'blur(80px)',
+          mixBlendMode: 'multiply',
+        }}></div>
       </div>
 
-      <div className="max-w-4xl mx-auto relative z-10 text-center">
-        <h1 className="text-8xl md:text-9xl font-serif font-bold text-white mb-8 leading-tight">
+      <div style={{
+        maxWidth: '56rem',
+        position: 'relative',
+        zIndex: 10,
+        textAlign: 'center',
+      }}>
+        <h1 style={{
+          fontSize: 'clamp(2.5rem, 10vw, 7rem)',
+          fontFamily: 'Georgia, serif',
+          fontWeight: 'bold',
+          marginBottom: '2rem',
+          lineHeight: 1.2,
+        }}>
           Husain Naseer
         </h1>
 
-        <p className="text-2xl text-gray-300 mb-6 font-semibold">
+        <p style={{
+          fontSize: '1.5rem',
+          color: '#d1d5db',
+          marginBottom: '1.5rem',
+          fontWeight: '600',
+        }}>
           Data Engineer • AI Systems Builder
         </p>
 
-        <p className="text-lg text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
+        <p style={{
+          fontSize: '1.125rem',
+          color: '#9ca3af',
+          marginBottom: '3rem',
+          lineHeight: 1.5,
+        }}>
           Building scalable data pipelines, machine learning systems, and real-time analytics solutions.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 mb-12 justify-center">
-          <button className="px-8 py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-all transform hover:scale-105 flex items-center justify-center gap-2">
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          marginBottom: '3rem',
+          justifyContent: 'center',
+        }}>
+          <button style={{
+            padding: '0.75rem 2rem',
+            backgroundColor: '#fff',
+            color: '#000',
+            fontWeight: '600',
+            borderRadius: '0.5rem',
+            border: 'none',
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.5rem',
+            transition: 'all 0.3s',
+            width: 'fit-content',
+            margin: '0 auto',
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = '#e5e5e5';
+            e.target.style.transform = 'scale(1.05)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = '#fff';
+            e.target.style.transform = 'scale(1)';
+          }}>
             View My Work <ArrowRight size={20} />
           </button>
-          <button className="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-black transition-all">
+          <button style={{
+            padding: '0.75rem 2rem',
+            border: '2px solid #fff',
+            color: '#fff',
+            fontWeight: '600',
+            borderRadius: '0.5rem',
+            backgroundColor: 'transparent',
+            cursor: 'pointer',
+            transition: 'all 0.3s',
+            width: 'fit-content',
+            margin: '0 auto',
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = '#fff';
+            e.target.style.color = '#000';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = 'transparent';
+            e.target.style.color = '#fff';
+          }}>
             Get in Touch
           </button>
         </div>
 
-        <div className="flex gap-6 justify-center">
-          <a href="https://github.com/Husainnaseer00" className="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+        <div style={{
+          display: 'flex',
+          gap: '1.5rem',
+          justifyContent: 'center',
+        }}>
+          <a href="https://github.com/Husainnaseer00" target="_blank" rel="noopener noreferrer" 
+            style={{ color: '#9ca3af', transition: 'color 0.3s' }}
+            onMouseEnter={(e) => e.target.style.color = '#fff'}
+            onMouseLeave={(e) => e.target.style.color = '#9ca3af'}>
             <Github size={28} />
           </a>
-          <a href="https://linkedin.com/in/hnaseer2/" className="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+          <a href="https://linkedin.com/in/hnaseer2/" target="_blank" rel="noopener noreferrer"
+            style={{ color: '#9ca3af', transition: 'color 0.3s' }}
+            onMouseEnter={(e) => e.target.style.color = '#fff'}
+            onMouseLeave={(e) => e.target.style.color = '#9ca3af'}>
             <Linkedin size={28} />
           </a>
-          <a href="mailto:husainnaseer41@gmail.com" className="text-gray-400 hover:text-white transition-colors">
+          <a href="mailto:husainnaseer41@gmail.com"
+            style={{ color: '#9ca3af', transition: 'color 0.3s' }}
+            onMouseEnter={(e) => e.target.style.color = '#fff'}
+            onMouseLeave={(e) => e.target.style.color = '#9ca3af'}>
             <Mail size={28} />
           </a>
         </div>
       </div>
 
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <ChevronDown size={32} className="text-white" />
+      <div style={{
+        position: 'absolute',
+        bottom: '40px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        animation: 'bounce 2s infinite',
+      }}>
+        <ChevronDown size={32} style={{ color: '#fff' }} />
       </div>
     </section>
   );
 
   const ProjectsSection = () => (
-    <section className="bg-white py-20 px-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-16">
-          <span className="text-black text-sm font-semibold tracking-wider">FEATURED WORK</span>
-          <h2 className="text-5xl font-serif font-bold text-black mt-2">Projects & Case Studies</h2>
-          <p className="text-gray-600 mt-4 max-w-2xl">Showcasing end-to-end data engineering, machine learning, and real-world impact.</p>
+    <section style={{
+      backgroundColor: '#fff',
+      padding: '5rem 1.5rem',
+    }}>
+      <div style={{
+        maxWidth: '1400px',
+        margin: '0 auto',
+      }}>
+        <div style={{ marginBottom: '4rem' }}>
+          <p style={{ color: '#000', fontSize: '0.875rem', fontWeight: '600', letterSpacing: '0.1em' }}>FEATURED WORK</p>
+          <h2 style={{ fontSize: '3rem', fontFamily: 'Georgia, serif', fontWeight: 'bold', color: '#000', marginTop: '0.5rem' }}>
+            Projects & Case Studies
+          </h2>
+          <p style={{ color: '#4b5563', marginTop: '1rem', maxWidth: '42rem' }}>
+            Showcasing end-to-end data engineering, machine learning, and real-world impact.
+          </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-2">
-          {projects.map((project, idx) => (
+        <div style={{
+          display: 'grid',
+          gap: '2rem',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+        }}>
+          {projects.map((project) => (
             <div
               key={project.id}
-              className="group bg-white border-2 border-black rounded-xl p-8 hover:border-black hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
               style={{
-                animation: `slideIn 0.6s ease-out ${idx * 0.1}s both`,
+                backgroundColor: '#fff',
+                border: '2px solid #000',
+                borderRadius: '0.75rem',
+                padding: '2rem',
+                transition: 'all 0.3s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.2)';
+                e.currentTarget.style.transform = 'translateY(-8px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
-              <div className="text-5xl mb-4">{project.image}</div>
-              <span className="text-black text-xs font-semibold tracking-wider">● {project.category}</span>
-              <h3 className="text-2xl font-serif font-bold text-black mt-3 mb-3">{project.title}</h3>
-              <p className="text-gray-700 mb-6">{project.description}</p>
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>{project.image}</div>
+              <p style={{ color: '#000', fontSize: '0.75rem', fontWeight: '600', letterSpacing: '0.1em' }}>● {project.category}</p>
+              <h3 style={{ fontSize: '1.5rem', fontFamily: 'Georgia, serif', fontWeight: 'bold', color: '#000', marginTop: '0.75rem', marginBottom: '0.75rem' }}>
+                {project.title}
+              </h3>
+              <p style={{ color: '#4b5563', marginBottom: '1.5rem' }}>{project.description}</p>
 
-              <div className="mb-6">
-                <div className="flex flex-wrap gap-2 mb-4">
+              <div style={{ marginBottom: '1.5rem' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
                   {project.tech.map((t) => (
-                    <span key={t} className="px-3 py-1 bg-black text-white text-xs rounded-full font-medium">
+                    <span key={t} style={{
+                      padding: '0.25rem 0.75rem',
+                      backgroundColor: '#000',
+                      color: '#fff',
+                      fontSize: '0.75rem',
+                      borderRadius: '9999px',
+                      fontWeight: '500',
+                    }}>
                       {t}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className="mb-6 space-y-2">
+              <div style={{ marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 {project.highlights.map((h) => (
-                  <div key={h} className="flex items-center gap-2 text-sm text-gray-700">
-                    <div className="w-1.5 h-1.5 bg-black rounded-full"></div>
+                  <div key={h} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#4b5563' }}>
+                    <div style={{ width: '6px', height: '6px', backgroundColor: '#000', borderRadius: '50%' }}></div>
                     {h}
                   </div>
                 ))}
               </div>
 
-              <a href={project.link} className="inline-flex items-center gap-2 text-black font-semibold hover:gap-3 transition-all border-b-2 border-black pb-1">
+              <a href="#" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: '#000', fontWeight: '600', borderBottom: '2px solid #000', paddingBottom: '0.25rem', transition: 'gap 0.3s' }}
+                onMouseEnter={(e) => e.currentTarget.style.gap = '0.75rem'}
+                onMouseLeave={(e) => e.currentTarget.style.gap = '0.5rem'}>
                 Read Case Study <ExternalLink size={16} />
               </a>
             </div>
-          ))}
-        </div>
-      </div>
-
-      <style>{`
-        @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
-    </section>
-  );
-
-  const BlogSection = () => (
-    <section className="bg-gray-50 py-20 px-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-16">
-          <span className="text-black text-sm font-semibold tracking-wider">INSIGHTS & LEARNINGS</span>
-          <h2 className="text-5xl font-serif font-bold text-black mt-2">Blog</h2>
-          <p className="text-gray-700 mt-4">Technical deep-dives, project walkthroughs, and lessons from building data systems.</p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3">
-          {blogPosts.map((post) => (
-            <article
-              key={post.id}
-              className="bg-white border-2 border-black rounded-xl p-8 hover:shadow-lg transition-all duration-300 cursor-pointer group"
-            >
-              <div className="flex justify-between items-start mb-4">
-                <span className="text-black text-xs font-semibold">● {post.category}</span>
-                <span className="text-gray-600 text-xs">{post.readTime}</span>
-              </div>
-              <h3 className="text-xl font-serif font-bold text-black mb-3 group-hover:underline transition-colors">
-                {post.title}
-              </h3>
-              <p className="text-gray-700 text-sm mb-4 leading-relaxed">{post.excerpt}</p>
-              <div className="text-gray-600 text-sm">{post.date}</div>
-            </article>
           ))}
         </div>
       </div>
@@ -255,36 +428,48 @@ export default function Portfolio() {
   );
 
   const About = () => (
-    <section className="bg-black py-20 px-6">
-      <div className="max-w-4xl mx-auto">
-        <span className="text-white text-sm font-semibold tracking-wider">ABOUT ME</span>
-        <h2 className="text-5xl font-serif font-bold text-white mt-2 mb-8">Background</h2>
+    <section style={{
+      backgroundColor: '#000',
+      padding: '5rem 1.5rem',
+    }}>
+      <div style={{
+        maxWidth: '56rem',
+        margin: '0 auto',
+      }}>
+        <p style={{ color: '#fff', fontSize: '0.875rem', fontWeight: '600', letterSpacing: '0.1em' }}>ABOUT ME</p>
+        <h2 style={{ fontSize: '3rem', fontFamily: 'Georgia, serif', fontWeight: 'bold', color: '#fff', marginTop: '0.5rem', marginBottom: '2rem' }}>
+          Background
+        </h2>
 
-        <div className="grid gap-12 md:grid-cols-2">
+        <div style={{
+          display: 'grid',
+          gap: '3rem',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+        }}>
           <div>
-            <h3 className="text-2xl font-serif font-bold text-white mb-4">Experience</h3>
-            <p className="text-gray-300 leading-relaxed mb-4">
+            <h3 style={{ fontSize: '1.5rem', fontFamily: 'Georgia, serif', fontWeight: 'bold', color: '#fff', marginBottom: '1rem' }}>Experience</h3>
+            <p style={{ color: '#d1d5db', lineHeight: 1.6, marginBottom: '1rem' }}>
               Data Engineer at Plus Materials (2022-2025), where I built ETL pipelines, implemented ranking models, and created real-time recommendation systems for analytics and AI applications.
             </p>
-            <p className="text-gray-300 leading-relaxed">
+            <p style={{ color: '#d1d5db', lineHeight: 1.6 }}>
               B.S. Computer Science from University of Georgia. Google Data Analytics Certified. Passionate about building scalable data systems.
             </p>
           </div>
 
           <div>
-            <h3 className="text-2xl font-serif font-bold text-white mb-4">Tech Stack</h3>
-            <div className="space-y-3">
+            <h3 style={{ fontSize: '1.5rem', fontFamily: 'Georgia, serif', fontWeight: 'bold', color: '#fff', marginBottom: '1rem' }}>Tech Stack</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div>
-                <p className="text-white font-semibold text-sm mb-2">Data & Analytics</p>
-                <p className="text-gray-400 text-sm">BigQuery, dbt, SQL, Python, ETL/ELT</p>
+                <p style={{ color: '#fff', fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Data & Analytics</p>
+                <p style={{ color: '#9ca3af', fontSize: '0.875rem' }}>BigQuery, dbt, SQL, Python, ETL/ELT</p>
               </div>
               <div>
-                <p className="text-white font-semibold text-sm mb-2">AI & ML</p>
-                <p className="text-gray-400 text-sm">TensorFlow, Scikit-learn, VADER NLP, Sentiment Analysis</p>
+                <p style={{ color: '#fff', fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.5rem' }}>AI & ML</p>
+                <p style={{ color: '#9ca3af', fontSize: '0.875rem' }}>TensorFlow, Scikit-learn, VADER NLP, Sentiment Analysis</p>
               </div>
               <div>
-                <p className="text-white font-semibold text-sm mb-2">Cloud & Infrastructure</p>
-                <p className="text-gray-400 text-sm">Google Cloud (BigQuery, Cloud Functions), AWS (Lambda, S3)</p>
+                <p style={{ color: '#fff', fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Cloud & Infrastructure</p>
+                <p style={{ color: '#9ca3af', fontSize: '0.875rem' }}>Google Cloud (BigQuery, Cloud Functions), AWS (Lambda, S3)</p>
               </div>
             </div>
           </div>
@@ -294,46 +479,65 @@ export default function Portfolio() {
   );
 
   const Footer = () => (
-    <footer className="bg-white border-t-2 border-black py-12 px-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-          <div>
-            <p className="text-gray-700 text-sm">© 2026 Husain Naseer. All rights reserved.</p>
-          </div>
-          <div className="flex gap-6">
-            <a href="https://github.com/Husainnaseer00" target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-600 transition-colors text-sm font-semibold">
-              GitHub
-            </a>
-            <a href="https://linkedin.com/in/hnaseer2/" target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-600 transition-colors text-sm font-semibold">
-              LinkedIn
-            </a>
-            <a href="mailto:husainnaseer41@gmail.com" className="text-black hover:text-gray-600 transition-colors text-sm font-semibold">
-              Email
-            </a>
-          </div>
+    <footer style={{
+      backgroundColor: '#fff',
+      borderTop: '2px solid #000',
+      padding: '3rem 1.5rem',
+    }}>
+      <div style={{
+        maxWidth: '1400px',
+        margin: '0 auto',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: '2rem',
+      }}>
+        <div>
+          <p style={{ color: '#4b5563', fontSize: '0.875rem' }}>© 2026 Husain Naseer. All rights reserved.</p>
+        </div>
+        <div style={{ display: 'flex', gap: '1.5rem' }}>
+          <a href="https://github.com/Husainnaseer00" target="_blank" rel="noopener noreferrer" style={{ color: '#000', fontSize: '0.875rem', fontWeight: '600', transition: 'color 0.3s' }}
+            onMouseEnter={(e) => e.target.style.color = '#666'}
+            onMouseLeave={(e) => e.target.style.color = '#000'}>
+            GitHub
+          </a>
+          <a href="https://linkedin.com/in/hnaseer2/" target="_blank" rel="noopener noreferrer" style={{ color: '#000', fontSize: '0.875rem', fontWeight: '600', transition: 'color 0.3s' }}
+            onMouseEnter={(e) => e.target.style.color = '#666'}
+            onMouseLeave={(e) => e.target.style.color = '#000'}>
+            LinkedIn
+          </a>
+          <a href="mailto:husainnaseer41@gmail.com" style={{ color: '#000', fontSize: '0.875rem', fontWeight: '600', transition: 'color 0.3s' }}
+            onMouseEnter={(e) => e.target.style.color = '#666'}
+            onMouseLeave={(e) => e.target.style.color = '#000'}>
+            Email
+          </a>
         </div>
       </div>
     </footer>
   );
 
   return (
-    <div className="bg-black min-h-screen text-white" style={{ fontFamily: "'Georgia', 'Garamond', serif" }}>
+    <div style={{
+      backgroundColor: '#000',
+      minHeight: '100vh',
+      color: '#fff',
+      fontFamily: "'Segoe UI', 'Trebuchet MS', sans-serif",
+    }}>
+      <style>{styles}</style>
       <style>{`
-        * {
-          font-family: 'Segoe UI', 'Trebuchet MS', sans-serif;
-        }
-        .font-serif {
-          font-family: 'Georgia', 'Garamond', 'Times New Roman', serif;
-        }
-        h1, h2, h3 {
-          font-family: 'Georgia', 'Garamond', serif;
+        @media (min-width: 768px) {
+          .desktop-nav {
+            display: flex !important;
+          }
+          .mobile-menu-btn {
+            display: none !important;
+          }
         }
       `}</style>
-
       <NavBar />
       <Hero />
       <ProjectsSection />
-      <BlogSection />
       <About />
       <Footer />
     </div>
