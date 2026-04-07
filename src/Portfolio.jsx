@@ -47,27 +47,27 @@ export default function Portfolio() {
   const blogPosts = [
     {
       id: 1,
-      title: 'Building ETL Pipelines with dbt: From Raw Data to Analytics',
-      excerpt: 'A deep dive into structuring modular data transformations and implementing data quality checks...',
-      date: 'Jan 2026',
-      readTime: '8 min',
+      title: 'Building Real-Time Data Pipelines with BigQuery',
       category: 'Data Engineering',
+      excerpt: 'A deep dive into ETL architecture, optimization techniques, and production best practices.',
+      readTime: '8 min read',
+      date: 'Coming Soon',
     },
     {
       id: 2,
-      title: 'Hybrid Search for Better Content Discovery',
-      excerpt: 'Combining semantic and full-text search to build recommendation systems that actually understand intent...',
-      date: 'Dec 2025',
-      readTime: '6 min',
+      title: 'RAG Systems: Bridging LLMs and Your Data',
       category: 'AI/ML',
+      excerpt: 'How to build retrieval-augmented generation systems that let AI reason over your documents.',
+      readTime: '6 min read',
+      date: 'Coming Soon',
     },
     {
       id: 3,
-      title: 'Integrating RAG with Business Databases',
-      excerpt: 'How to give LLMs secure access to your data and build AI agents that reason over structured information...',
-      date: 'Nov 2025',
-      readTime: '10 min',
-      category: 'LLM',
+      title: 'Search Technology: From Keywords to Semantics',
+      category: 'Search',
+      excerpt: 'Exploring hybrid search, embeddings, and how modern systems find what users actually mean.',
+      readTime: '7 min read',
+      date: 'Coming Soon',
     },
   ];
 
@@ -80,7 +80,6 @@ export default function Portfolio() {
           {['Home', 'Projects', 'Blog', 'About'].map((item) => (
             <button
               key={item}
-              onClick={() => setActiveSection(item.toLowerCase())}
               className="text-gray-300 hover:text-white transition-colors font-medium"
             >
               {item}
@@ -99,10 +98,7 @@ export default function Portfolio() {
             {['Home', 'Projects', 'Blog', 'About'].map((item) => (
               <button
                 key={item}
-                onClick={() => {
-                  setActiveSection(item.toLowerCase());
-                  setMenuOpen(false);
-                }}
+                onClick={() => setMenuOpen(false)}
                 className="text-gray-300 hover:text-white transition-colors text-left"
               >
                 {item}
